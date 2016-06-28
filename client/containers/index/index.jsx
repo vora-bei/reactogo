@@ -14,7 +14,7 @@ import SideMenu from 'side-menu/side-menu.jsx';
 let s = getStyle();
 let slider;
 
-export default class Index extends React.Component {
+export class Index extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -56,7 +56,7 @@ export default class Index extends React.Component {
     const props = this.props;
     const isMobile = this.props.viewport.get('isMobile');
     const overlayStyle = Object.assign({}, s.overlay, {
-      height: $('body')[0].scrollHeight,
+      height: $('body')[0].scrollHeight
     });
 
     return (<div>
@@ -99,5 +99,5 @@ Index.displayName = 'Index';
 
 export default connect((state) => ({
   isSideMenu: state.get('sideMenu').get('isSideMenuOpen'),
-  viewport: state.get('viewport'),
+  viewport: state.get('viewport')
 }))(Index);

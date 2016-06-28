@@ -29,7 +29,7 @@ var config = {
       {
         id: 'jsx',
         test:/\.(js|jsx)?$/,
-        loaders: ['babel?presets[]=react,presets[]=es2015,plugins[]=add-module-exports', 'eslint-loader'],
+        loaders: ['babel?presets[]=react,presets[]=es2015,plugins[]=add-module-exports'],
         exclude: /(node_modules)/,
       },
       {
@@ -63,8 +63,8 @@ var config = {
       './client/actions',
       './client/store',
       './client/globals'
-    ],
-  },
+    ]
+  }
 };
 
 module.exports = config;
