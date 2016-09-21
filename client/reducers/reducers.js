@@ -6,6 +6,7 @@ import { modalsReducer } from './modals/modals.js';
 import { viewportReducer } from './viewport/viewport.js';
 import { fetchedDataReducer } from './fetched-data/fetched-data.js';
 import { toastersReducer } from './toaster/toaster.js';
+import { gridsReducer } from './grid/grid.js';
 import { sideMenuReducer } from './side-menu/side-menu.js';
 import routeReducer from './route-reducer.js';
 
@@ -17,6 +18,7 @@ const app = combineReducers({
   toasters: toastersReducer,
   sideMenu: sideMenuReducer,
   fetchedData: fetchedDataReducer,
+  grid: gridsReducer
 });
 
 export default app;
