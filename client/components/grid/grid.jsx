@@ -120,16 +120,19 @@ export class GridBody extends React.Component {
 
     sort() {
         var data = this.props.data;
-        var columns = this.props.columns,directionColumns=columns.filter(function (column) {
+        var columns = this.props.columns, directionColumns = columns.filter(function (column) {
             return column.get('direction');
         });
-       return data.sort(
+        return data.sort(
             function (a, b) {
+                var sort = 0;
                 directionColumns.forEach(function (column) {
-                    let name=column.get('name');
-                   return column.get('direction')* a.get(name).localeCompare(b.get(name))
+                    let name = column.get('name');
+                    if (sort === 0) {
+                        sort = column.get('direction') * a.get(name).localeCompare(b.get(name))
+                    }
                 })
-                return a.get('name').localeCompare(b.get('name'))
+                return sort;
             }
         );
     }
