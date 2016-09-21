@@ -127,7 +127,7 @@ export class GridBody extends React.Component {
             function (a, b) {
                 directionColumns.forEach(function (column) {
                     let name=column.get('name');
-                   00 column.get('direction')* a.get(name).localeCompare(b.get(name))
+                   return column.get('direction')* a.get(name).localeCompare(b.get(name))
                 })
                 return a.get('name').localeCompare(b.get('name'))
             }
