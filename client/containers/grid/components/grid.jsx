@@ -1,22 +1,28 @@
 // Libs
 import { connect } from 'react-redux';
-import grid from 'grid/grid.jsx';
+import GridTag from 'grid/grid.jsx';
 // Actions
-import { requestData } from 'grid.js';
+import { requestData,changeDirection } from 'grid.js';
 
 class Grid extends React.Component {
-    componentWillMount(){
+    componentWillMount() {
         this.props.dispatch(requestData())
     }
+
     constructor(props) {
         super(props);
     }
 
     render() {
-        return (<grid dataProvider={this.props.dataProvider} columns={this.props.columns}></grid>);
+        return (<GridTag
+            data={this.props.data}
+            columns={this.props.columns}
+            onChangeDirection={(key, sort)=>this.props.dispatch(changeDirection(key, sort))}/>);
     }
 }
 
 
-export default connect((state) => ({data: state.get('data'), columns: state.get('columns')}))(Grid);
+export default connect(function (state) {
+    return ({data: state.getIn(['grid', 'data']), columns: state.getIn(['grid', 'columns'])});
+})(Grid);
 
