@@ -7,8 +7,7 @@ import { createStore, applyMiddleware } from 'redux';
 // Reducers
 import appReducer from '../reducers/reducers.js';
 
-// Actions
-import { setViewport } from 'viewport.js';
+
 
 
 const stateTransformer = (state) => state.toJS();
@@ -28,7 +27,6 @@ export function initializeStore() {
   const createStoreWithMiddleware = applyMiddleware.apply(null, middleWares)(createStore);
 
   store = createStoreWithMiddleware(appReducer);
-  store.dispatch(setViewport(window.innerWidth));
 
   return store;
 

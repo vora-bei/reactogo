@@ -2,23 +2,19 @@
 
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Sortable } from 'react-sortable';
-export default
-class Grid extends React.Component {
-//https://github.com/SortableJS/react-mixin-sortablejs
+export default class Grid extends React.Component {
     constructor(props) {
         super(props);
-        this.onChange = this.onChange.bind(this);
     }
 
-    onChange(...props) {
-        this.props.onChangeDirection(...props)
-    }
 
     render() {
         return (
             <table>
-                <GridHeader columns={this.props.columns} onChangeDirection={this.onChange}/>
+                <GridHeader
+                    columns={this.props.columns}
+                    onChangeDirection={ this.props.onChangeDirection}
+                    onChangeColumnOrder={this.props.onChangeColumnOrder}/>
                 <GridBody {...this.props}/>
             </table>
         );
@@ -27,29 +23,28 @@ class Grid extends React.Component {
 Grid.propTypes = {
     columns: ImmutablePropTypes.list.isRequired,
     data: ImmutablePropTypes.list.isRequired,
-    onChangeDirection: React.PropTypes.func.isRequired
+    onChangeDirection: React.PropTypes.func.isRequired,
+    onChangeColumnOrder: React.PropTypes.func.isRequired
 
 }
 export class GridHeaderItem extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        let column=this.props.column;
-        return (<th>{column.get('title')}
+        let column = this.props.column;
+        return (<th>
+            <span onClick={()=>this.props.onChangeColumnOrder(column.get('name'),-1)}>[&larr;]</span>
+            {column.get('title')}
             <ArrowControl onChangeDirection={(i)=> {
                 this.props.onChangeDirection.call(this, column.get('name'), i)
             }} direction={column.get('sort')}/>
+            <span onClick={()=>this.props.onChangeColumnOrder(column.get('name'),1)}>[&rarr;]</span>
         </th>);
     }
 }
 GridHeaderItem.propTypes = {
     column: ImmutablePropTypes.map.isRequired,
-    onChangeDirection: React.PropTypes.func.isRequired
+    onChangeDirection: React.PropTypes.func.isRequired,
+    onChangeColumnOrder: React.PropTypes.func.isRequired
 }
-let SortableGridHeaderItem=Sortable(GridHeaderItem)
 export class GridHeader extends React.Component {
 
     constructor(props) {
@@ -59,50 +54,26 @@ export class GridHeader extends React.Component {
     render() {
         return (
             <thead>
-                <tr>
+            <tr>
                 {this.props.columns.map((column)=> {
-                    let childProps={column:column,onChangeDirection:this.props.onChangeDirection};
-                    return <SortableGridHeaderItem
+                    return <GridHeaderItem
                         key={column.get('name')}
-                        childProps={childProps}
                         column={column}
+                        onChangeDirection={this.props.onChangeDirection}
+                        onChangeColumnOrder={this.props.onChangeColumnOrder}
 
                     />
                 })}
-                </tr>
+            </tr>
             </thead>
         );
     }
 }
 GridHeader.propTypes = {
     columns: ImmutablePropTypes.list.isRequired,
-    onChangeDirection: React.PropTypes.func.isRequired
-}
-export class GridFooter extends React.Component {
+    onChangeDirection: React.PropTypes.func.isRequired,
+    onChangeColumnOrder: React.PropTypes.func.isRequired
 
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <tfoot>
-                <td>
-                {this.props.columns.map(function (column) {
-                    return <td>{column.title}
-                        <ArrowControl onChangeDirection={(i)=> {
-                            this.props.onChangeDirection.bind(this, column.get('name'), i)
-                        }} direction={column.order} key={column.get('name')}/>
-                    </td>
-                })}
-                </td>
-            </tfoot>
-        );
-    }
-}
-GridFooter.propTypes = {
-    columns: ImmutablePropTypes.list.isRequired,
-    onChangeDirection: React.PropTypes.func.isRequired
 }
 export class ArrowControl extends React.Component {
     constructor(props) {
@@ -117,11 +88,11 @@ export class ArrowControl extends React.Component {
 
     render() {
         return (
-            <span onClick={this.onChange}>
+            <span onClick={this.onChange}>(
                 {this.props.direction === 1 ? 'ASC' : ''}
                 {this.props.direction === -1 ? 'DESC' : ''}
                 {this.props.direction === 0 ? '-' : ''}
-            </span>
+            )</span>
         );
     }
 }
@@ -150,7 +121,7 @@ export class GridBody extends React.Component {
                 directionColumns.forEach(function (column) {
                     let name = column.get('name');
                     if (sort === 0) {
-                        sort = column.get('sort') * String(a.get(name)).localeCompare(String(b.get(name)))
+                        sort = column.get('sort') * (a.get(name) === b.get(name) ? 0 : (a.get(name) < b.get(name)) ? 1 : -1)
                     }
                 })
                 return sort;
@@ -163,7 +134,8 @@ export class GridBody extends React.Component {
         return (
             <tbody>
             {data.map(function (row, i) {
-                return (<tr key={i}>{columns.map((column) => <td key={column.get('name')}>{row.get(column.get('name'))}</td>)}</tr>)
+                return (<tr key={i}>{columns.map((column) => <td
+                    key={column.get('name')}>{row.get(column.get('name'))}</td>)}</tr>)
             })}
             </tbody>
         );

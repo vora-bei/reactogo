@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import GridTag from 'grid/grid.jsx';
 // Actions
-import { requestData,changeDirection } from 'grid.js';
+import { requestData,changeDirection, changeColumnOrder } from 'grid.js';
 
 class Grid extends React.Component {
     componentWillMount() {
@@ -17,7 +17,9 @@ class Grid extends React.Component {
         return (<GridTag
             data={this.props.data}
             columns={this.props.columns}
-            onChangeDirection={(key, sort)=>this.props.dispatch(changeDirection(key, sort))}/>);
+            onChangeDirection={(key, sort)=>this.props.dispatch(changeDirection(key, sort))}
+            onChangeColumnOrder={(key, direction)=>this.props.dispatch(changeColumnOrder(key, direction))}
+        />);
     }
 }
 

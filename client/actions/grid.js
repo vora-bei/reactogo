@@ -3,6 +3,7 @@
  */
 export const REQUEST_DATA = 'REQUEST_DATA';
 export const CHANGE_DIRECTION = 'CHANGE_DIRECTION';
+export const CHANGE_COLUMN_ORDER = 'CHANGE_COLUMN_ORDER';
 export function requestData() {
     return {
         columns: [
@@ -17,12 +18,25 @@ export function requestData() {
                 'sort': 0
             },
             {
+                'name': 'age',
+                'title': 'Возраст',
+                'sort': -1
+            },
+            {
                 'name': 'more',
                 'title': 'Больше',
                 'sort': -1
             }
         ],
-        data: [{'title': 1, 'descr': 2,more:1}, {'title': 2, 'descr': 2,more:2}, {'title': 5, 'descr': 2,more:3}],
+        data: [
+            {'title': 'Ваня', 'descr': 2, more: 1, 'age': 12},
+            {'title': 'Даша', 'descr': 2, more: 2, 'age': 21},
+            {'title': 'Даша', 'descr': 2, more: 2, 'age': 22},
+            {'title': 'Даша', 'descr': 2, more: 4, 'age': 23},
+            {'title': 'Даша', 'descr': 2, more: 2, 'age': 24},
+            {'title': 'Даша', 'descr': 2, more: 2, 'age': 25},
+            {'title': 'Борис', 'descr': 2, more: 3, 'age': 21}
+        ],
         type: 'REQUEST_DATA'
     };
 };
@@ -30,6 +44,13 @@ export function changeDirection(key, direction) {
     return {
         key,
         direction,
-        type: 'CHANGE_DIRECTION'
+        type: CHANGE_DIRECTION
+    };
+};
+export function changeColumnOrder(key, direction) {
+    return {
+        key,
+        direction,
+        type: CHANGE_COLUMN_ORDER
     };
 };

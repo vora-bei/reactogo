@@ -1,7 +1,7 @@
 /**
  * Created by Никита on 20.09.2016.
  */
-import {REQUEST_DATA,CHANGE_DIRECTION} from 'grid.js';
+import {REQUEST_DATA, CHANGE_DIRECTION, CHANGE_COLUMN_ORDER} from 'grid.js';
 
 export const initialState = Immutable.fromJS({
     columns: [
@@ -31,8 +31,16 @@ export const gridsReducer = (state = initialState, action) => {
                 .set('data', Immutable.fromJS(action.data))
         case (CHANGE_DIRECTION):
             return state.set('columns', state.get('columns').map((column)=>
-                column.get('name')==action.key?column.set('sort',action.direction):column
+                column.get('name') == action.key ? column.set('sort', action.direction) : column
             ));
+        case (CHANGE_COLUMN_ORDER):
+            let columns = state.get('columns'),
+                index = columns.findIndex((column) =>column.get('name') == action.key),
+                newIndex = action.direction + index,
+                column = columns.get(index);
+            columns = columns.remove(index)
+            columns = columns.insert(newIndex, column)
+            return state.set('columns', columns);
         default:
             return state;
     }
